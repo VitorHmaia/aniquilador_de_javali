@@ -1,5 +1,5 @@
 
-package jogocarro;
+package aniquilador_javali;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -11,14 +11,20 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.ImageIcon;
 
-public class GameCarro extends javax.swing.JFrame implements Runnable {
+public class Application extends javax.swing.JFrame implements Runnable {
 
+
+   //Tamanho da tela
+   private int height = 600;
+   private int whidth = 800; 
+
+    //Teclas de movimentação
     private boolean left;
     private boolean right;
     private boolean space;
-    private boolean letraR;
+    private boolean teclaR;
     
-    public GameCarro() {
+    public Application() {
         initComponents();
         createBufferStrategy(2);
         Thread t = new Thread(this);
@@ -39,36 +45,44 @@ public class GameCarro extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        //Configuração do layout da tela
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
+            //Largura
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, whidth, Short.MAX_VALUE)
         );
+            //Altura
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, height, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Método que monitora as teclas
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
+            //Tecla esquerda
             left = true;
         } else if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
+            //Tecla direita
             right = true;
         }
         else if (evt.getKeyCode() == KeyEvent.VK_SPACE) 
         {
+            //Tecla espaço
             space = true;
         }
         else if (evt.getKeyCode() == KeyEvent.VK_R) 
         {
-            letraR = true;
+            teclaR = true;
         }
     }//GEN-LAST:event_formKeyPressed
 
+    //Método que verifica se as teclas foram soltas
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
             left = false;
@@ -78,14 +92,15 @@ public class GameCarro extends javax.swing.JFrame implements Runnable {
             space = false;
         }
          else if (evt.getKeyCode() == KeyEvent.VK_R) {
-            letraR = false;
+            teclaR = false;
         }
     }//GEN-LAST:event_formKeyReleased
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    //Inicializa a janela da aplicação
+     public static void main(String args[]) {
  
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -95,18 +110,18 @@ public class GameCarro extends javax.swing.JFrame implements Runnable {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GameCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Application.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GameCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Application.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GameCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Application.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GameCarro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Application.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GameCarro().setVisible(true);
+                new Application().setVisible(true);
             }
         });
     }
@@ -114,14 +129,11 @@ public class GameCarro extends javax.swing.JFrame implements Runnable {
     @Override
     public void run() {
         
-        Graphics g;
-        int ctrlCar = 0;
-        int ctrlTiro = 0;
-        int velPlayer = 0;
-        int velCar = 1;
-        int s = 0;
-        int setPlayer=0;
-        int setPlayer2=0;
+        Graphics g = getBufferStrategy().getDrawGraphics();
+
+        //Instancia e toca o efeito sonoro em loop infinito (boolean true)
+		SoundEffect backsound = new SoundEffect("./sounds/tracksound.wav", true);
+		backsound.play();
 
         ArrayList <Carro> carros1 = new ArrayList();
         ArrayList <Carro> carros2 = new ArrayList();
@@ -138,9 +150,10 @@ public class GameCarro extends javax.swing.JFrame implements Runnable {
         ArrayList <Explosao> explosoes = new ArrayList();
         ArrayList <Explosao> lixoExplosoes = new ArrayList();
         
-        int score=0;
+        /*int score=0;
         int record=0;
         int level=1;
+        */
         
         Carro player = new Carro("carro2.png");
         player.setX(getWidth()/4);
@@ -443,7 +456,7 @@ public class GameCarro extends javax.swing.JFrame implements Runnable {
                 if(score==record)
                     g.drawString("NEW RECORD !", getWidth() / 2 - 65, gameOver.getY()-20);
                     
-                if(letraR)
+                if(teclaR)
                 {
                     player.setVida(100);
                     carros1.clear();
